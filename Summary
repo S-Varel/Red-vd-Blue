@@ -1,0 +1,75 @@
+Network Topology
+The following machines were identified on the network:
+Name of VM 1
+Operating System:Linux
+Purpose:Target 1
+IP Address: 192.168.1.110
+Name of VM 2
+Operating System: Linux
+Purpose: Target 2
+IP Address: 192.168.1.115
+
+Description of Targets
+The target of this attack was: Target 1 (192.168.1.110).
+Target 1 is an Apache web server and has SSH enabled, so ports 80 and 22 are possible ports of entry for attackers. As such, the following alerts have been implemented:
+Monitoring the Targets
+Traffic to these services should be carefully monitored. To this end, we have implemented the alerts below:
+Alert 1: Excessive HTTP Errors 
+Alert 1   is implemented as follows:
+Metric: monitor for excessive HTTP errors
+Threshold: >400 for 5 minutes
+Vulnerability Mitigated: Shows the requests related to the HTTP web requests. Identifies periods of time when there is an excessive amount of requests within 5 minutes. 
+Reliability: Medium reliability since this alert creates false positives for valid requests. 
+
+Alert 2: HTTP Request Size Monitor
+Alert 2 is implemented as follows:
+Metric: monitor the HTTP size of bytes of size requested 
+Threshold: >3500 bytes per 1 minute
+Vulnerability Mitigated: Shows when there is excess network traffic based on the average traffic that is seen on a regular basis. 
+Reliability: High reliability since the alert is based on average traffic and monitors based on that average. 
+Alert 3: CPU Usage Monitor
+Alert 3 is implemented as follows:
+Metric: monitor the CPU Usage
+Threshold: >.5 for 5 minutes
+Vulnerability Mitigated: Shows excess resources being used in a given timeframe
+Reliability: High reliability the alert will not create a lot of false results.
+Red Team: Summary of Operations
+Table of Contents
+Exposed Services
+Critical Vulnerabilities
+Exploitation
+Exposed Services
+Nmap scan results for each machine reveal the below services and OS details:
+$ nmap -sV 192.168.1.110/24
+ 
+192.168.1.110
+
+192.168.1.115
+
+ 
+This scan identifies the services below as potential points of entry:
+Target 1
+Open Ports: 22/80/111/139/145
+Exposed Services: ssh/http/rpcbind/netbios-ssn
+The following vulnerabilities were identified on each target:
+Target 1
+Wordpress Apache 2.4.10 Debian
+Wordpress xmlrpc.php
+Wordpress version 4.8.7 (insecure)
+
+
+Exploitation
+The Red Team was able to penetrate Target 1 and retrieve the following confidential data:
+Target 1
+flag1.txt: b9bbcb33e11b80be759c4e844862482d
+Exploit Used
+ssh michale@192.168.1.110  (password: Michael)
+cd var/www/  
+cd html/  
+grep -RE flag 
+ 
+flag2.txt: fc3fd58dcdad9ab23faca6e9a36e581c
+Exploit Used
+cd var/www 
+cat flag2.txt 
+
